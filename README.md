@@ -1,0 +1,1 @@
+Homework 2 is to visualize shot data of a few members of the Golden State Warriors, while working with more complex file stuctures. 
