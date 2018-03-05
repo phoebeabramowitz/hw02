@@ -2,8 +2,10 @@
 # Description: This script combines data about different shooters on
 # the Golden State Warriors
 # Input(s): andre-iguodala.csv, draymond-green.csv,kevin-durant.csv
-# klay-thompson.csv, stephen-curry.csv
-# Output(s): shots-data.csv
+#   klay-thompson.csv, stephen-curry.csv
+# Output(s): shots-data.csv,stephen-curry-summary.txt, andre-iguodala-sumary.txt
+#     draymond-green-summary.txt, kevin-durant-summary.txt,
+#     klay-thompson-summary.txt,shots-data-summary.txt
 # Author: Phoebe Abramowitz
 # Date: 03-04-2018
 #-------------------------------------------------------------------
@@ -56,5 +58,33 @@ green <- mutate(green,minute=(12*period)-minutes_remaining)
 thompson <- mutate(thompson,minute=(12*period)-minutes_remaining)
 durant <- mutate(durant,minute=(12*period)-minutes_remaining)
 
-#use sink()
+#use sink() to save text file summaries 
+sink(file = '../output/stephen-curry-summary.txt')
+summary(curry)
+sink()
 
+sink(file='../output/andre-iguodala-summary.txt')
+summary(iguodala)
+sink()
+
+sink(file='../output/draymond-green-summary.txt')
+summary(green)
+sink()
+
+sink(file='../output/kevin-durant-summary.txt')
+summary(durant)
+sink()
+
+sink(file='../output/klay-thompson-summary.txt')
+summary(thompson)
+sink()
+
+#ask about row names
+#use rbind() to stack the tables into one single data frame
+shots_data <- rbind(curry,iguodala,green,durant,thompson, make.row.names=FALSE,
+                    stringsAsFactors=FALSE)
+#write csv in data and send summary with sink() to output
+write.csv(shots_data,'../data/shots-data.csv',row.names=FALSE)
+sink(file='../output/shots-data-summary.txt')
+summary(shots_data)
+sink()
