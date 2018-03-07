@@ -84,3 +84,13 @@ dev.off()
 pdf(file="../images/kevin-durant-shot-chart.pdf",width=6.5,height=5)  
 durant_shot_chart
 dev.off()
+
+#create facetted shot chart c
+gsw_shot_chart <- ggplot(data=shots_data)+
+  annotation_custom(court_image, -250,250,-50,420)+
+  geom_point(aes(x=x,y=y,color=shot_made_flag))+
+  ylim(-50,420)+
+  facet_wrap(~name)+
+  ggtitle("Shot Charts: GSW(2016 Season")+
+  theme_minimal()
+gsw_shot_chart

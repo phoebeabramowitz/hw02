@@ -37,6 +37,7 @@ durant <- mutate(durant,name="Kevin Durant")
 
 #change values of shot_made_flag to be more descriptive
 curry[curry$shot_made_flag=="y","shot_made_flag"] = "made shot"
+curry[curry$shot_made_flag=="made_shot","shot_made_flag"] = "made shot"
 curry[curry$shot_made_flag=="n","shot_made_flag"] = "missed shot"
 
 iguodala[iguodala$shot_made_flag=="y","shot_made_flag"] = "made shot"
