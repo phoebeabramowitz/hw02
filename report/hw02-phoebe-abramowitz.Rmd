@@ -1,9 +1,52 @@
 ---
-title: "Homework 2"
+title: "HW-02: Shot Charts"
 author: "Phoebe Abramowitz"
 date: "3/4/2018"
 output: github_document
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, fig.path='../images')
+library(dpylr)
+```
+##5.1
+```{r setup, include=FALSE}
+#do I need to oo the knitr thing everytime?
+#should I instead be pulling shots-data from the previous script? not sure how to do that in R
+shots_data <- read.csv('../data/shots-data.csv')
+shots_data
+
+#group by player name and count number of shots 
+player_shot_count<- count(shots_data, name, sort=TRUE)
+psc <- rename(player_shot_count,total=n)
+psc
+```
+##5.2
 ```{r}
+#effective shooting percent by player
+efctv_shot_count<- rename(count(filter(shots_data, shot_made_flag=="made shot"), 
+                                name), made=n)
+comb <- left_join(psc,efctv_shot_count)
+shooting_perc <- arrange(mutate(comb, perc_made=(made/total)),desc(perc_made))
+
+
+
+shots_data_2pt <- filter(shots_data, shot_type=="2PT Field Goal")
+psc_2pt <- rename(count(shots_data_2pt,name, sort=TRUE),total=n)
+
+efctv_shot_count_2pt<- rename(count(filter(shots_data_2pt, shot_made_flag=="made shot"),
+                                    name), made=n)
+comb_2pt <- left_join(psc_2pt,efctv_shot_count_2pt)
+shooting_perc_2pt <- arrange(mutate(comb_2pt, perc_made=(made/total)),desc(perc_made))
+
+
+shots_data_3pt <- filter(shots_data, shot_type=="3PT Field Goal")
+psc_3pt <- rename(count(shots_data_3pt,name, sort=TRUE),total=n)
+
+efctv_shot_count_3pt<- rename(count(filter(shots_data_3pt, shot_made_flag=="made shot"),
+                                    name), made=n)
+comb_3pt <- left_join(psc_3pt,efctv_shot_count_3pt)
+shooting_perc_3pt <- arrange(mutate(comb_3pt, perc_made=(made/total)),desc(perc_made))
+
+
 
 ```

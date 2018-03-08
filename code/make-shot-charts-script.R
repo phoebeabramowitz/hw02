@@ -1,7 +1,10 @@
 # Title: Make Shot Charts Script
-# Description: 
-# Input(s): 
-# Output(s): 
+# Description: Create shot charts from 2016 season data set 
+# Input(s): nba-court.jpg, shots-data.csv
+# Output(s): gsw-shot-charts.pdf,stephen-curry-shot-chart.pdf
+#   klay-thompson-shot-chart.pdf, draymond-green-shot-chart.pdf
+#   kevin-durant-shot-chart.pdf, andre-iguodala-shot-chart.pdf,
+#   gsw-shot-charts.pdf
 # Author: Phoebe Abramowitz
 # Date: 03-07-2018
 #=================================================================================
@@ -93,4 +96,9 @@ gsw_shot_chart <- ggplot(data=shots_data)+
   facet_wrap(~name)+
   ggtitle("Shot Charts: GSW(2016 Season")+
   theme_minimal()
+
+
+pdf(file="../images/gsw-shot-charts.pdf",width=8,height=7)  
 gsw_shot_chart
+dev.off()
+
