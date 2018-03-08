@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(echo=TRUE, fig.path='../images')
 library(dpylr)
 ```
-##5.1
+## Question 5.1
 ```{r setup, include=FALSE}
 #do I need to oo the knitr thing everytime?
 #should I instead be pulling shots-data from the previous script? not sure how to do that in R
@@ -20,7 +20,7 @@ player_shot_count<- count(shots_data, name, sort=TRUE)
 psc <- rename(player_shot_count,total=n)
 psc
 ```
-##5.2
+## Question 5.2
 ```{r}
 #effective shooting percent by player
 efctv_shot_count<- rename(count(filter(shots_data, shot_made_flag=="made shot"), 
@@ -48,5 +48,33 @@ comb_3pt <- left_join(psc_3pt,efctv_shot_count_3pt)
 shooting_perc_3pt <- arrange(mutate(comb_3pt, perc_made=(made/total)),desc(perc_made))
 
 
-
+shooting_perc_2pt
+shooting_perc_3pt
+shooting_perc
 ```
+## Question 6
+```{r}
+#dWHy am I getting numbers >1 here? Only for distance values above 33, which is very big
+shots_data_dist <-mutate(shots_data,shot_distance=round(sqrt(x^2+y^2)))
+                        
+dist_shot_count <- count(shots_data, shot_distance)
+dsc <- arrange(rename(dist_shot_count,total=n),shot_distance)
+#this next is giving values greater than the general count, do we have some shots without
+#distance values?
+efctv_shot_dist<-count(filter(shots_data_dist, shot_made_flag=="made shot"),
+                                shot_distance)
+comb_dist <- left_join(dsc,efctv_shot_dist)
+shooting_perc_dist <- arrange(mutate(comb_dist, 
+                                     made_shot_prop=(n/total)))
+spd <- select(shooting_perc_dist,shot_distance,made_shot_prop)
+spd
+```
+```{r}
+ggplot(data=spd)+
+  geom_point(aes(x=shot_distance,y=made_shot_prop),color="blue")+
+  ggtitle("Proportion of shots made by distance")
+```
+This appears to confirm the opposite, ask in OH
+## Question 7
+
+
