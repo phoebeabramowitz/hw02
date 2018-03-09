@@ -6,11 +6,11 @@ output: github_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, fig.path='../images')
-library(dpylr)
 ```
 ## Question 5.1
-```{r setup, include=FALSE}
-#do I need to oo the knitr thing everytime?
+```{r}
+library("dplyr")
+library('ggplot2')
 #should I instead be pulling shots-data from the previous script? not sure how to do that in R
 shots_data <- read.csv('../data/shots-data.csv')
 shots_data
@@ -56,25 +56,56 @@ shooting_perc
 ```{r}
 #dWHy am I getting numbers >1 here? Only for distance values above 33, which is very big
 shots_data_dist <-mutate(shots_data,shot_distance=round(sqrt(x^2+y^2)))
+filter(shots_data_dist,shot_distance<50)
                         
-dist_shot_count <- count(shots_data, shot_distance)
+dist_shot_count <- count(shots_data_dist, shot_distance)
+
 dsc <- arrange(rename(dist_shot_count,total=n),shot_distance)
-#this next is giving values greater than the general count, do we have some shots without
-#distance values?
+dsc
+
 efctv_shot_dist<-count(filter(shots_data_dist, shot_made_flag=="made shot"),
                                 shot_distance)
+efctv_shot_dist
+
 comb_dist <- left_join(dsc,efctv_shot_dist)
+comb_dist
 shooting_perc_dist <- arrange(mutate(comb_dist, 
                                      made_shot_prop=(n/total)))
 spd <- select(shooting_perc_dist,shot_distance,made_shot_prop)
 spd
 ```
+## Question 6.2
 ```{r}
-ggplot(data=spd)+
+ggplot(data=slice(spd,1:38))+
   geom_point(aes(x=shot_distance,y=made_shot_prop),color="blue")+
+  ggtitle("Proportion of shots made by distance, up to 38in from net")
+ggplot(data=spd)+
+  geom_point(aes(x=shot_distance,y=made_shot_prop),color="green")+
   ggtitle("Proportion of shots made by distance")
 ```
-This appears to confirm the opposite, ask in OH
+###Observations:/
+Looking at the overall scatter plot, there's not an obvious overall downward trend, so we can't confirm that the shorter/ the distance, the more effective the shots. There is however, a clearly visible downward trend within 38 inches of the net./
+It's worth noting that there's much higher rates of shooting very close to the net and around 230 inches(closest to the net/ while in the 3-point zone), so there's many more baskets made from there despite scattered proportions. Very few shots are/ taken more than 300 inches from the net. The 20 inches closest to the net all have a >50% of making the shot. I can't infer/
+the distance at which chances of making a shot are basically null, but almost no shots are taken beyond 300 inches/ away.
+If players are choosing not to take shots further than that, it's probably because they don't beleive they/ can be effective.
+
 ## Question 7
 
+```{r}
+d <- data.frame(x1=c(0,24),y1=c(0,0),x2=c(12,36),y2=c(60,60))
+
+by_minute_player <-count(shots_data,minute,name)
+gsw_shot_chart <- ggplot(data=by_minute_player)+
+  geom_rect(data=d,mapping=aes(xmin=x1,ymin=y1,xmax=x2,ymax=y2),fill="grey97",color="grey90")+
+  geom_path(aes(x=minute,y=n),color="lightblue2")+
+  geom_point(aes(x=minute,y=n),color="steelblue2",shape=20)+
+  ylim(0,60)+
+  facet_wrap(~name)+
+  scale_x_continuous()+
+  ggtitle("Total Number of Shots(By Minute of Occurence)")+
+  theme_minimal()+
+  labs(x="minute",y="total number of shots")
+
+gsw_shot_chart
+```
 
