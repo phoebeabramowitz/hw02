@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo=TRUE, fig.path='../images')
 ```{r}
 library("dplyr")
 library('ggplot2')
-#should I instead be pulling shots-data from the previous script? not sure how to do that in R
+
 shots_data <- read.csv('../data/shots-data.csv')
 shots_data
 
@@ -54,7 +54,7 @@ shooting_perc
 ```
 ## Question 6
 ```{r}
-#dWHy am I getting numbers >1 here? Only for distance values above 33, which is very big
+
 shots_data_dist <-mutate(shots_data,shot_distance=round(sqrt(x^2+y^2)))
 filter(shots_data_dist,shot_distance<50)
                         
@@ -87,7 +87,7 @@ ggplot(data=spd)+
 Looking at the overall scatter plot, there's not an obvious overall downward trend, so we can't confirm that the shorter/ the distance, the more effective the shots. There is however, a clearly visible downward trend within 38 inches of the net./
 It's worth noting that there's much higher rates of shooting very close to the net and around 230 inches(closest to the net/ while in the 3-point zone), so there's many more baskets made from there despite scattered proportions. Very few shots are/ taken more than 300 inches from the net. The 20 inches closest to the net all have a >50% of making the shot. I can't infer/
 the distance at which chances of making a shot are basically null, but almost no shots are taken beyond 300 inches/ away.
-If players are choosing not to take shots further than that, it's probably because they don't beleive they/ can be effective.
+If players are choosing not to take shots further than that, it's probably because they don't beleive they/ can be effective.\
 
 ## Question 7
 
