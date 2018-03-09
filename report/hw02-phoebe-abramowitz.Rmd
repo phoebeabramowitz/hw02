@@ -13,7 +13,7 @@ library("dplyr")
 library('ggplot2')
 
 shots_data <- read.csv('../data/shots-data.csv')
-shots_data
+
 
 #group by player name and count number of shots 
 player_shot_count<- count(shots_data, name, sort=TRUE)
